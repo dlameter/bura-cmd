@@ -8,7 +8,7 @@ pub struct GameState {
     pub players: Vec<Player>,
     pub current_player: usize,
     pub deck: Deck,
-    pub trick: Trick,
+    pub trick: Option<Trick>,
     pub trump: Option<Card>,
 }
 
@@ -18,7 +18,7 @@ impl GameState {
             players,
             current_player: 0,
             deck,
-            trick: Trick::new(),
+            trick: None,
             trump: None,
         }
     }
