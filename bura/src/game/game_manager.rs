@@ -1,15 +1,22 @@
-use crate::Card;
-use crate::Deck;
 use crate::game::GameState;
+use crate::Deck;
 use crate::Player;
 use std::io;
 
-pub struct GameManager {
+pub struct GameManager<T: Fn(Deck) -> Deck> {
     pub game_state: GameState,
+    shuffler: T,
 }
 
-impl GameManager {
-    pub fn ask_for_player() -> Result<Player, String> {
+impl<T: Fn(Deck) -> Deck> GameManager<T> {
+    pub fn new(game_state: GameState, shuffler: T) -> GameManager<T> {
+        GameManager {
+            game_state,
+            shuffler
+        }
+    }
+
+    fn ask_for_player() -> Result<Player, String> {
         let mut name = String::new();
         match io::stdin().read_line(&mut name) {
             Ok(_) => Ok(Player::new(name)),
@@ -17,25 +24,24 @@ impl GameManager {
         }
     }
 
-    fn build_deck() -> Deck {
-        let mut cards = Vec::new();
-
-        for suit in &["H", "D", "S", "C"] {
-            for value in &[
-                "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K",
-            ] {
-                cards.push(Card {
-                    suit: String::from(suit.to_owned()),
-                    value: String::from(value.to_owned()),
-                })
-            }
+    pub fn start(&mut self) -> Option<Player> {
+        if self.setup().is_err() {
+            return None
         }
-
-        Deck::new(cards)
+        None
     }
 
-    pub fn start(&mut self) -> Option<Player> {
-        GameManager::build_deck();
-        None
+    fn setup(&mut self) -> Result<(), ()> {
+        match Self::ask_for_player() {
+            Ok(player) => self.game_state.players.push(player),
+            Err(_) => return Err(())
+        }
+
+        match Self::ask_for_player() {
+            Ok(player) => self.game_state.players.push(player),
+            Err(_) => return Err(())
+        }
+
+        Ok(())
     }
 }
