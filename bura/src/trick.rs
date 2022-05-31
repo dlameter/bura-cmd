@@ -2,22 +2,48 @@ use crate::Card;
 
 #[derive(Debug)]
 pub struct Trick {
-    pub lead: Vec<Card>,
-    pub follow: Vec<Card>
+    pub lead: Option<Vec<Card>>,
+    pub follow: Option<Vec<Card>>
 }
 
 impl Trick {
     pub fn new() -> Trick {
         Trick {
-            lead: Vec::new(),
-            follow: Vec::new()
+            lead: None,
+            follow: None
         }
     }
 
     pub fn leading_suit(&self) -> Option<String> {
-        return match self.lead.first() {
+        return match self.lead.and_then(|lead| lead.first()) {
             Some(card) => Some(card.suit.clone()),
             None => None
         }
+    }
+
+    pub fn play(&mut self, cards: Vec<Card>) {
+        if self.lead.is_none() {
+            self.lead = Some(cards);
+        } else if self.follow.is_none() {
+            self.follow = Some(cards);
+        } else {
+            panic!("tried to play a hand on a full trick!");
+        }
+    }
+
+    pub fn take_cards(&mut self) -> Vec<Card> {
+        let cards = Vec::new();
+
+        if let Some(lead_cards) = self.lead {
+            cards.append(&mut lead_cards);
+            self.lead = None;
+        }
+
+        if let Some(follow_cards) = self.follow {
+            cards.append(&mut follow_cards);
+            self.follow = None;
+        }
+
+        cards
     }
 }
