@@ -4,7 +4,7 @@ use crate::Player;
 use std::io;
 use std::io::Write;
 
-type GameStep = Box<dyn Fn(&mut GameState)>;
+type GameStep = fn(&mut GameState);
 
 pub struct GameManager<T: Fn(&mut Deck)> {
     game_state: GameState,
@@ -40,6 +40,13 @@ impl<T: Fn(&mut Deck)> GameManager<T> {
         if self.setup().is_err() {
             return None
         }
+
+        println!("GameState: {:#?}", self.game_state);
+
+        for step in &self.game_steps {
+            step(&mut self.game_state);
+        }
+
         println!("GameState: {:#?}", self.game_state);
         None
     }
