@@ -2,9 +2,10 @@ use crate::game::GameState;
 use crate::Deck;
 use crate::Player;
 use std::io;
+use std::io::Write;
 
 pub struct GameManager<T: Fn(Deck) -> Deck> {
-    pub game_state: GameState,
+    game_state: GameState,
     shuffler: T,
 }
 
@@ -18,6 +19,9 @@ impl<T: Fn(Deck) -> Deck> GameManager<T> {
 
     fn ask_for_player() -> Result<Player, String> {
         let mut name = String::new();
+
+        print!("Enter player's name: ");
+        io::stdout().flush().expect("Failed to flush stdout while getting player name");
         match io::stdin().read_line(&mut name) {
             Ok(_) => Ok(Player::new(name)),
             Err(_) => Err("Failed to read player name".to_owned()),

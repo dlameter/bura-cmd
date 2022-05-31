@@ -1,5 +1,5 @@
 mod card;
-mod deck;
+pub mod deck;
 pub mod game;
 mod hand;
 mod player;
