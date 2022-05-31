@@ -1,5 +1,6 @@
 use crate::Card;
 
+#[derive(Debug)]
 pub struct Trick {
     cards: Vec<Card>
 }

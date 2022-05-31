@@ -3,6 +3,7 @@ use crate::deck::Deck;
 use crate::player::Player;
 use crate::trick::Trick;
 
+#[derive(Debug)]
 pub struct GameState {
     pub players: Vec<Player>,
     pub current_player: i32,
