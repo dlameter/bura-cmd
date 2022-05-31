@@ -4,18 +4,25 @@ use crate::Player;
 use std::io;
 use std::io::Write;
 
-#[derive(Debug)]
+type GameStep = Box<dyn Fn(&mut GameState)>;
+
 pub struct GameManager<T: Fn(&mut Deck)> {
     game_state: GameState,
     shuffler: T,
+    game_steps: Vec<GameStep>
 }
 
 impl<T: Fn(&mut Deck)> GameManager<T> {
     pub fn new(game_state: GameState, shuffler: T) -> GameManager<T> {
         GameManager {
             game_state,
-            shuffler
+            shuffler,
+            game_steps: Vec::new()
         }
+    }
+
+    pub fn add_step(&mut self, step: GameStep) {
+        self.game_steps.push(step);
     }
 
     fn ask_for_player() -> Result<Player, String> {
@@ -50,7 +57,7 @@ impl<T: Fn(&mut Deck)> GameManager<T> {
 
         (self.shuffler)(&mut self.game_state.deck);
 
-        println!("GameState: {:#?}", self.game_state);
+        self.game_state.trump = self.game_state.deck.draw();
 
         Ok(())
     }
