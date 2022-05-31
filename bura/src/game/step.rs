@@ -1,9 +1,11 @@
 use crate::game::GameState;
 
+const MAX_CARDS: usize = 3;
+
 pub fn draw(state: &mut GameState) {
     if let Some(player) = state.players.get_mut(state.current_player) {
-        println!("{} draws until they have 5 cards", &player.name);
-        while player.hand.cards.len() < 5 && state.deck.cards.len() > 0 {
+        println!("{} draws until they have {} cards", &player.name, MAX_CARDS);
+        while player.hand.cards.len() < MAX_CARDS && state.deck.cards.len() > 0 {
             match state.deck.draw() {
                 Some(card) => player.hand.cards.push(card),
                 None => break
