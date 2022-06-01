@@ -93,6 +93,7 @@ impl Trick {
         }
     }
 
+    // TODO: Should probably go into the card class somehow as a value mapper
     fn card_value_to_order_value(card_value: &str) -> i32 {
         match card_value {
             "A" => 9,
