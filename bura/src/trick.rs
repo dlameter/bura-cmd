@@ -1,5 +1,11 @@
 use crate::Card;
 
+#[derive(PartialEq)]
+pub enum Winner {
+    Lead,
+    Follow,
+}
+
 #[derive(Debug)]
 pub struct Trick {
     pub lead: Option<Vec<Card>>,
@@ -45,5 +51,60 @@ impl Trick {
         }
 
         cards
+    }
+
+    pub fn winner(&self, trump_suit: &str) -> Winner {
+        if self.lead.is_some() && self.follow.is_some() {
+            let lead = self.lead.as_ref().unwrap();
+            let follow = self.follow.as_ref().unwrap();
+
+            lead.iter()
+                .zip(follow.iter())
+                .map(|(lead_card, follow_card)| {
+                    Self::score_stack(trump_suit, lead_card, follow_card)
+                })
+                .fold(Winner::Follow, |win1, win2| {
+                    if win1 == win2 {
+                        win1
+                    } else {
+                        Winner::Lead
+                    }
+                })
+        } else {
+            Winner::Lead
+        }
+    }
+
+    fn score_stack(trump_suit: &str, lead_card: &Card, follow_card: &Card) -> Winner {
+        if lead_card.suit == follow_card.suit {
+            if Self::card_value_to_order_value(&lead_card.value)
+                >= Self::card_value_to_order_value(&follow_card.value)
+            {
+                Winner::Lead
+            } else {
+                Winner::Follow
+            }
+        } else {
+            if follow_card.suit == trump_suit {
+                Winner::Follow
+            } else {
+                Winner::Lead
+            }
+        }
+    }
+
+    fn card_value_to_order_value(card_value: &str) -> i32 {
+        match card_value {
+            "A" => 9,
+            "10" => 8,
+            "K" => 7,
+            "Q" => 6,
+            "J" => 5,
+            "9" => 4,
+            "8" => 3,
+            "7" => 2,
+            "6" => 1,
+            _ => 0,
+        }
     }
 }
