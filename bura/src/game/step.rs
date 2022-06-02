@@ -2,9 +2,11 @@ use crate::game::GameState;
 
 mod play;
 mod score_trick;
+mod declare_win;
 
 pub use play::*;
 pub use score_trick::*;
+pub use declare_win::*;
 
 const MAX_CARDS: usize = 3;
 
