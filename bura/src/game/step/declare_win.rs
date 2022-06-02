@@ -49,11 +49,19 @@ pub fn declare_win(state: &mut GameState) {
                 "{} you've won this round with {} points!",
                 current_player.name, current_player.points
             );
+            state.set_winner(state.current_player);
+            state.current_player_mut().unwrap().game_points += 1;
+            state.current_player_mut().unwrap().points = 0;
+            state.next_player_mut().unwrap().points = 0;
         } else {
             println!(
                 "{} you lost this round.  You had {} points.",
                 current_player.name, current_player.points
             );
+            state.set_winner(state.next_player_index());
+            state.next_player_mut().unwrap().game_points += 1;
+            state.current_player_mut().unwrap().points = 0;
+            state.next_player_mut().unwrap().points = 0;
         }
     }
 }

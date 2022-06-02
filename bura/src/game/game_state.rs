@@ -7,6 +7,7 @@ use crate::trick::Trick;
 pub struct GameState {
     pub players: Vec<Player>,
     pub current_player: usize,
+    pub winner: Option<usize>,
     pub deck: Deck,
     pub trick: Option<Trick>,
     pub trump: Option<Card>,
@@ -17,6 +18,7 @@ impl GameState {
         GameState {
             players,
             current_player: 0,
+            winner: None,
             deck,
             trick: None,
             trump: None,
@@ -40,7 +42,17 @@ impl GameState {
         self.players.get_mut(index)
     }
 
-    fn next_player_index(&self) -> usize {
+    pub fn next_player_index(&self) -> usize {
         (self.current_player + 1) % self.players.len()
+    }
+
+    pub fn winner(&self) -> Option<&Player> {
+        self.winner.and_then(|winner_index| self.players.get(winner_index))
+    }
+
+    pub fn set_winner(&mut self, player_index: usize) {
+        if let Some(_) = self.players.get(player_index) {
+            self.winner = Some(player_index);
+        }
     }
 }

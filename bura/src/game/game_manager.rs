@@ -41,13 +41,16 @@ impl<T: Fn(&mut Deck)> GameManager<T> {
             return None
         }
 
-        println!("GameState: {:#?}", self.game_state);
-
-        for step in &self.game_steps {
-            step(&mut self.game_state);
+        while self.game_state.winner().is_none() {
+            for step in &self.game_steps {
+                step(&mut self.game_state);
+                if self.game_state.winner().is_some() {
+                    break;
+                }
+            }
         }
 
-        println!("GameState: {:#?}", self.game_state);
+        println!("Players: {:#?}", self.game_state.players);
         None
     }
 

@@ -16,6 +16,7 @@ fn main() {
     manager.add_step(step::declare_win);
     manager.add_step(step::change_player);
     manager.add_step(step::declare_win);
+    manager.add_step(step::change_player);
     
     manager.start();
 }

@@ -22,7 +22,7 @@ pub fn draw(state: &mut GameState) {
 
 pub fn change_player(state: &mut GameState) {
     if state.players.len() > 0 {
-        state.current_player = (state.current_player + 1) % state.players.len();
+        state.current_player = state.next_player_index();
         println!(
             "It is now {}'s turn",
             &state.players.get(state.current_player).unwrap().name
