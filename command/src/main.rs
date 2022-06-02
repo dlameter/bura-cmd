@@ -13,6 +13,9 @@ fn main() {
     manager.add_step(step::play);
     manager.add_step(step::change_player);
     manager.add_step(step::score_trick);
+    manager.add_step(step::declare_win);
+    manager.add_step(step::change_player);
+    manager.add_step(step::declare_win);
     
     manager.start();
 }
