@@ -8,10 +8,10 @@ pub fn play(state: &mut GameState) {
     let mut cards = Vec::new();
     while cards.len() == 0 {
         show_game_info(&state);
-        cards = match ask_for_card_selection(state.current_player().unwrap()).and_then(
+        cards = match ask_for_card_selection(state.player_state.current_player().unwrap()).and_then(
             |mut selections| {
                 choices_to_cards(
-                    &mut state.current_player_mut().unwrap().hand,
+                    &mut state.player_state.current_player_mut().unwrap().hand,
                     &mut selections,
                 )
             },

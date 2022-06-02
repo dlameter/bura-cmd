@@ -5,9 +5,7 @@ use crate::trick::Trick;
 
 #[derive(Debug)]
 pub struct GameState {
-    pub players: Vec<Player>,
-    pub current_player: usize,
-    pub winner: Option<usize>,
+    pub player_state: PlayerState,
     pub deck: Deck,
     pub trick: Option<Trick>,
     pub trump: Option<Card>,
@@ -16,12 +14,27 @@ pub struct GameState {
 impl GameState {
     pub fn new(players: Vec<Player>, deck: Deck) -> GameState {
         GameState {
-            players,
-            current_player: 0,
-            winner: None,
+            player_state: PlayerState::new(players),
             deck,
             trick: None,
             trump: None,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct PlayerState {
+    pub players: Vec<Player>,
+    pub current_player: usize,
+    pub winner: Option<usize>,
+}
+
+impl PlayerState {
+    pub fn new(players: Vec<Player>) -> PlayerState {
+        PlayerState {
+            players,
+            current_player: 0,
+            winner: None,
         }
     }
 

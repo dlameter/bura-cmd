@@ -41,27 +41,27 @@ impl<T: Fn(&mut Deck)> GameManager<T> {
             return None
         }
 
-        while self.game_state.winner().is_none() {
+        while self.game_state.player_state.winner().is_none() {
             for step in &self.game_steps {
                 step(&mut self.game_state);
-                if self.game_state.winner().is_some() {
+                if self.game_state.player_state.winner().is_some() {
                     break;
                 }
             }
         }
 
-        println!("Players: {:#?}", self.game_state.players);
+        println!("Players: {:#?}", self.game_state.player_state.players);
         None
     }
 
     fn setup(&mut self) -> Result<(), ()> {
         match Self::ask_for_player() {
-            Ok(player) => self.game_state.players.push(player),
+            Ok(player) => self.game_state.player_state.players.push(player),
             Err(_) => return Err(())
         }
 
         match Self::ask_for_player() {
-            Ok(player) => self.game_state.players.push(player),
+            Ok(player) => self.game_state.player_state.players.push(player),
             Err(_) => return Err(())
         }
 

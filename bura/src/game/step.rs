@@ -11,21 +11,21 @@ pub use declare_win::*;
 const MAX_CARDS: usize = 3;
 
 pub fn draw(state: &mut GameState) {
-    println!("{} draws until they have {} cards", &state.current_player().unwrap().name, MAX_CARDS);
-    while state.current_player().unwrap().hand.cards.len() < MAX_CARDS && state.deck.cards.len() > 0 {
+    println!("{} draws until they have {} cards", &state.player_state.current_player().unwrap().name, MAX_CARDS);
+    while state.player_state.current_player().unwrap().hand.cards.len() < MAX_CARDS && state.deck.cards.len() > 0 {
         match state.deck.draw() {
-            Some(card) => state.current_player_mut().unwrap().hand.cards.push(card),
+            Some(card) => state.player_state.current_player_mut().unwrap().hand.cards.push(card),
             None => break,
         }
     }
 }
 
 pub fn change_player(state: &mut GameState) {
-    if state.players.len() > 0 {
-        state.current_player = state.next_player_index();
+    if state.player_state.players.len() > 0 {
+        state.player_state.current_player = state.player_state.next_player_index();
         println!(
             "It is now {}'s turn",
-            &state.players.get(state.current_player).unwrap().name
+            &state.player_state.players.get(state.player_state.current_player).unwrap().name
         );
     }
 }
