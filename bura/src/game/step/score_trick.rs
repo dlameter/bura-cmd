@@ -12,11 +12,8 @@ pub fn score_trick(state: &mut GameState) {
 
 fn get_winning_player(winner: Winner, state: &mut GameState) -> &mut Player {
     match winner {
-        Winner::Lead => state.players.get_mut(state.current_player).unwrap(),
-        Winner::Follow => {
-            let next_index = (state.current_player + 1) % state.players.len();
-            state.players.get_mut(next_index).unwrap()
-        }
+        Winner::Lead => state.current_player_mut().unwrap(),
+        Winner::Follow => state.next_player_mut().unwrap()
     }
 }
 

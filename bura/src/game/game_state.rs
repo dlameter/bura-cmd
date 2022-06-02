@@ -22,4 +22,25 @@ impl GameState {
             trump: None,
         }
     }
+
+    pub fn current_player(&self) -> Option<&Player> {
+        self.players.get(self.current_player)
+    }
+
+    pub fn current_player_mut(&mut self) -> Option<&mut Player> {
+        self.players.get_mut(self.current_player)
+    }
+
+    pub fn next_player(&self) -> Option<&Player> {
+        self.players.get(self.next_player_index())
+    }
+
+    pub fn next_player_mut(&mut self) -> Option<&mut Player> {
+        let index = self.next_player_index();
+        self.players.get_mut(index)
+    }
+
+    fn next_player_index(&self) -> usize {
+        (self.current_player + 1) % self.players.len()
+    }
 }
