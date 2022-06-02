@@ -1,3 +1,5 @@
+use std::io;
+
 use crate::game::GameState;
 
 mod play;
@@ -28,4 +30,13 @@ pub fn change_player(state: &mut GameState) {
             &state.player_state.players.get(state.player_state.current_player).unwrap().name
         );
     }
+}
+
+pub fn clear_screen(_state: &mut GameState) {
+    print!("{esc}c", esc = 27 as char);
+}
+
+pub fn confirm_player(state: &mut GameState) {
+    println!("Confirm {} player", state.player_state.current_player().unwrap().name);
+    io::stdin().read_line(&mut String::new()).unwrap();
 }
