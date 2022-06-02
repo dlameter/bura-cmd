@@ -6,6 +6,7 @@ pub fn score_trick(state: &mut GameState) {
     if let (Some(trick), Some(trump)) = (&mut state.trick, &state.trump) {
         let sum = sum_card_values(trick.take_cards());
         let winner = get_winning_player(trick.winner(&trump.suit), state);
+        println!("{} won the trick and got {} points!", &winner.name, &sum);
         winner.points += sum;
     }
 }
