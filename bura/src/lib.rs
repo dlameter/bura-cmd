@@ -1,4 +1,4 @@
-mod card;
+pub mod card;
 pub mod deck;
 pub mod game;
 mod hand;

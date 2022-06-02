@@ -1,5 +1,5 @@
 use crate::game::GameState;
-use crate::{Card, Hand, Player, Trick};
+use crate::{Card, Hand, Player, Trick, card};
 use std::io;
 use std::io::Write;
 use std::str::FromStr;
@@ -37,25 +37,13 @@ fn show_game_info(state: &GameState) {
             .suit
     );
     if let Some(lead) = state.trick.as_ref().and_then(|trick| trick.lead.as_ref()) {
-        println!("Current lead [{}]", cards_to_string(lead));
+        println!("Current lead [{}]", card::cards_to_string(lead));
     };
-}
-
-fn cards_to_string(cards: &[Card]) -> String {
-    let mut iter = cards.iter();
-    let mut string = String::new();
-    if let Some(first_card) = iter.next() {
-        string = format!("{}", first_card);
-        for card in iter {
-            string += format!(", {}", card).as_ref();
-        }
-    }
-    string
 }
 
 fn ask_for_card_selection(player: &Player) -> Result<Vec<usize>, String> {
     println!("{}'s current hand", &player.name);
-    display_hand(&player.hand);
+    println!("[{}]", card::cards_to_string(&player.hand.cards));
 
     print!("List the indexes of which cards you'd like to play separated by spaces: ");
     io::stdout()
@@ -79,12 +67,6 @@ fn parse_input_choices(input: String) -> Result<Vec<usize>, String> {
         Err("Failed to parse input into integers".to_owned())
     } else {
         Ok(choices.into_iter().map(|choice| choice.unwrap()).collect())
-    }
-}
-
-fn display_hand(hand: &Hand) {
-    for card in &hand.cards {
-        print!("{}, ", &card)
     }
 }
 

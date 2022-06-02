@@ -1,4 +1,4 @@
-use crate::Card;
+use crate::{Card, card::bura};
 
 #[derive(PartialEq)]
 pub enum Winner {
@@ -77,8 +77,8 @@ impl Trick {
 
     fn score_stack(trump_suit: &str, lead_card: &Card, follow_card: &Card) -> Winner {
         if lead_card.suit == follow_card.suit {
-            if Self::card_value_to_order_value(&lead_card.value)
-                >= Self::card_value_to_order_value(&follow_card.value)
+            if bura::card_value_to_order_value(&lead_card.value)
+                >= bura::card_value_to_order_value(&follow_card.value)
             {
                 Winner::Lead
             } else {
@@ -90,22 +90,6 @@ impl Trick {
             } else {
                 Winner::Lead
             }
-        }
-    }
-
-    // TODO: Should probably go into the card class somehow as a value mapper
-    fn card_value_to_order_value(card_value: &str) -> i32 {
-        match card_value {
-            "A" => 9,
-            "10" => 8,
-            "K" => 7,
-            "Q" => 6,
-            "J" => 5,
-            "9" => 4,
-            "8" => 3,
-            "7" => 2,
-            "6" => 1,
-            _ => 0,
         }
     }
 }
