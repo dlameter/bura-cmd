@@ -5,22 +5,52 @@ use std::io::Write;
 use std::str::FromStr;
 
 pub fn play(state: &mut GameState) {
-    if let Some(player) = state.players.get_mut(state.current_player) {
-        let mut cards = Vec::new();
-        while cards.len() == 0 {
-            cards = match ask_for_card_selection(player)
-                .and_then(|mut selections| choices_to_cards(&mut player.hand, &mut selections))
-            {
-                Ok(cards) => cards,
-                Err(error) => {
-                    println!("{}", error);
-                    continue;
-                }
-            };
+    let mut cards = Vec::new();
+    while cards.len() == 0 {
+        show_game_info(&state);
+        cards = match ask_for_card_selection(state.current_player().unwrap()).and_then(
+            |mut selections| {
+                choices_to_cards(
+                    &mut state.current_player_mut().unwrap().hand,
+                    &mut selections,
+                )
+            },
+        ) {
+            Ok(cards) => cards,
+            Err(error) => {
+                println!("{}", error);
+                continue;
+            }
         }
-
-        state.trick.get_or_insert(Trick::new()).play(cards);
     }
+
+    state.trick.get_or_insert(Trick::new()).play(cards);
+}
+
+fn show_game_info(state: &GameState) {
+    println!(
+        "Trump suit: {}",
+        &state
+            .trump
+            .as_ref()
+            .expect("Trump not set when player is playing")
+            .suit
+    );
+    if let Some(lead) = state.trick.as_ref().and_then(|trick| trick.lead.as_ref()) {
+        println!("Current lead [{}]", cards_to_string(lead));
+    };
+}
+
+fn cards_to_string(cards: &[Card]) -> String {
+    let mut iter = cards.iter();
+    let mut string = String::new();
+    if let Some(first_card) = iter.next() {
+        string = format!("{}", first_card);
+        for card in iter {
+            string += format!(", {}", card).as_ref();
+        }
+    }
+    string
 }
 
 fn ask_for_card_selection(player: &Player) -> Result<Vec<usize>, String> {
