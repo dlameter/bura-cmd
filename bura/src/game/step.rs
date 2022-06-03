@@ -14,7 +14,7 @@ const MAX_CARDS: usize = 3;
 
 pub fn draw(state: &mut GameState) {
     println!("{} draws until they have {} cards", &state.player_state.current_player().unwrap().name, MAX_CARDS);
-    while state.player_state.current_player().unwrap().hand.cards.len() < MAX_CARDS && state.deck.cards.len() > 0 {
+    while state.player_state.current_player().unwrap().hand.cards.len() < MAX_CARDS && !state.deck.cards.is_empty() {
         match state.deck.draw() {
             Some(card) => state.player_state.current_player_mut().unwrap().hand.cards.push(card),
             None => break,
@@ -23,7 +23,7 @@ pub fn draw(state: &mut GameState) {
 }
 
 pub fn change_player(state: &mut GameState) {
-    if state.player_state.players.len() > 0 {
+    if !state.player_state.players.is_empty() {
         state.player_state.current_player = state.player_state.next_player_index();
         println!(
             "It is now {}'s turn",

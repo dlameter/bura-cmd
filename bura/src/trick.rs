@@ -12,14 +12,16 @@ pub struct Trick {
     pub follow: Option<Vec<Card>>,
 }
 
-impl Trick {
-    pub fn new() -> Trick {
+impl Default for Trick {
+    fn default() -> Self {
         Trick {
             lead: None,
             follow: None,
         }
     }
+}
 
+impl Trick {
     pub fn leading_suit(&self) -> Option<String> {
         return match self.lead.as_ref().and_then(|lead| lead.first()) {
             Some(card) => Some(card.suit.clone()),
@@ -84,12 +86,10 @@ impl Trick {
             } else {
                 Winner::Follow
             }
+        } else if follow_card.suit == trump_suit {
+            Winner::Follow
         } else {
-            if follow_card.suit == trump_suit {
-                Winner::Follow
-            } else {
-                Winner::Lead
-            }
+            Winner::Lead
         }
     }
 }

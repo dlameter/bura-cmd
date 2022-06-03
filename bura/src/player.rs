@@ -12,7 +12,7 @@ impl Player {
     pub fn new(name: String) -> Player {
         Player {
             name,
-            hand: Hand::new(),
+            hand: Hand::default(),
             points: 0,
             game_points: 0
         }

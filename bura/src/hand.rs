@@ -5,8 +5,8 @@ pub struct Hand {
     pub cards: Vec<Card>
 }
 
-impl Hand {
-    pub fn new() -> Hand {
+impl Default for Hand {
+    fn default() -> Self {
         Hand {
             cards: Vec::new()
         }

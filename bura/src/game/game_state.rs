@@ -64,7 +64,7 @@ impl PlayerState {
     }
 
     pub fn set_winner(&mut self, player_index: usize) {
-        if let Some(_) = self.players.get(player_index) {
+        if self.players.get(player_index).is_some() {
             self.winner = Some(player_index);
         }
     }

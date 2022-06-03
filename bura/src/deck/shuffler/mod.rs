@@ -1,3 +1,3 @@
-mod shuffler;
+mod rng_shuffler;
 
-pub use shuffler::*;
+pub use rng_shuffler::*;

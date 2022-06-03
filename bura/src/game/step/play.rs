@@ -6,7 +6,7 @@ use std::str::FromStr;
 
 pub fn play(state: &mut GameState) {
     let mut cards = Vec::new();
-    while cards.len() == 0 {
+    while cards.is_empty() {
         show_game_info(&state);
         cards = match ask_for_card_selection(state.player_state.current_player().unwrap()).and_then(
             |mut selections| {
@@ -24,7 +24,7 @@ pub fn play(state: &mut GameState) {
         }
     }
 
-    state.trick.get_or_insert(Trick::new()).play(cards);
+    state.trick.get_or_insert(Trick::default()).play(cards);
 }
 
 fn show_game_info(state: &GameState) {
@@ -63,7 +63,7 @@ fn parse_input_choices(input: String) -> Result<Vec<usize>, String> {
         .split_whitespace()
         .map(|string| usize::from_str(string))
         .collect();
-    if choices.iter().find(|choice| choice.is_err()).is_some() {
+    if choices.iter().any(|choice| choice.is_err()) {
         Err("Failed to parse input into integers".to_owned())
     } else {
         Ok(choices.into_iter().map(|choice| choice.unwrap()).collect())
@@ -71,12 +71,12 @@ fn parse_input_choices(input: String) -> Result<Vec<usize>, String> {
 }
 
 fn choices_to_cards(hand: &mut Hand, choices: &mut Vec<usize>) -> Result<Vec<Card>, String> {
-    choices.sort();
+    choices.sort_unstable();
     choices.dedup();
 
     let cards = &mut hand.cards;
-    let mut selections = choices.into_iter().map(|choice| cards.get(*choice));
-    if selections.find(|selection| selection.is_none()).is_some() {
+    let mut selections = choices.iter_mut().map(|choice| cards.get(*choice));
+    if selections.any(|selection| selection.is_none()) {
         return Err("A selection is invalid".to_owned());
     }
 
@@ -86,5 +86,5 @@ fn choices_to_cards(hand: &mut Hand, choices: &mut Vec<usize>) -> Result<Vec<Car
         chosen_cards.push(cards.remove(*index));
     }
 
-    return Ok(chosen_cards);
+    Ok(chosen_cards)
 }

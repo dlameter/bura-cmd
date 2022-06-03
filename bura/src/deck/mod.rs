@@ -1,5 +1,19 @@
 pub mod builder;
-mod deck;
 pub mod shuffler;
 
-pub use deck::Deck;
+use crate::Card;
+
+#[derive(Debug)]
+pub struct Deck {
+    pub cards: Vec<Card>,
+}
+
+impl Deck {
+    pub fn new(cards: Vec<Card>) -> Deck {
+        Deck { cards }
+    }
+
+    pub fn draw(&mut self) -> Option<Card> {
+        self.cards.pop()
+    }
+}
